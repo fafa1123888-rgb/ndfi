@@ -2,228 +2,205 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyLoan Enterprise Admin Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RSX RESET KEY - RISZY XZIAM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
-        body { font-family: 'Prompt', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        /* --- ธีมสี Cyberpunk Gaming 2026 ถอดแบบจากเว็บหลัก --- */
+        :root {
+            --primary-red: #ff003c;
+            --neon-blue: #00e5ff;
+            --dark-bg: #050203;
+            --panel-bg: #0f0708;
+            --border-color: rgba(255, 0, 60, 0.25);
+            --text-gray: #a6a6a6;
+            --success-green: #00ff66;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+            font-family: 'Mitr', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #260309 0%, var(--dark-bg) 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        .reset-box {
+            background: var(--panel-bg);
+            border: 2px solid var(--primary-red);
+            border-radius: 24px;
+            padding: 35px 25px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 0 35px rgba(255, 0, 60, 0.25);
+            animation: boxFadeUp 0.5s ease-in-out;
+        }
+
+        @keyframes boxFadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-section h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .header-section h2 span {
+            color: var(--primary-red);
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+        }
+
+        .header-section p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 0.88rem;
+            color: var(--text-gray);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #000;
+            color: #fff;
+            font-size: 1.05rem;
+            outline: none;
+            text-align: center;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.25);
+        }
+
+        .info-display-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--border-color);
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .info-row:last-child { border-bottom: none; }
+        .info-lbl { color: var(--text-gray); }
+        .info-val { font-weight: 500; }
+        .info-val.highlight { color: var(--neon-blue); font-family: monospace; }
+        .info-val.device-text { word-break: break-all; max-width: 200px; text-align: right; font-family: monospace; font-size: 0.8rem; }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .btn-red { background: var(--primary-red); color: white; }
+        .btn-red:hover { background: #ff2154; box-shadow: 0 0 15px rgba(255,0,60,0.4); }
+        .btn-grey { background: #1a0b0d; color: #ffb3b7; border: 1px solid rgba(255,0,60,0.15); text-decoration: none; }
+        .btn-grey:hover { background: #2b1114; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex">
+<body>
 
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex shrink-0">
-        <div>
-            <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
-                <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-600/30">
-                    <i class="fa-solid fa-shield-halved text-lg"></i>
+    <div class="reset-box">
+        <div class="header-section">
+            <h2>RSX <span>รีเซ็ทคีย์</span></h2>
+            <p>ระบบเคลียร์อุปกรณ์ ย้ายเครื่องใช้งานสำหรับลูกค้า VIP</p>
+        </div>
+
+        <div id="search-container">
+            <div class="input-group">
+                <label><i class="fa-solid fa-key" style="color: var(--primary-red);"></i> รหัสคีย์ไลเซนส์ของคุณ:</label>
+                <input type="text" id="customerKeyInput" class="form-input" placeholder="วางรหัสคีย์ของคุณที่นี่...">
+            </div>
+            <button class="btn btn-red" onclick="checkCustomerKeyData()">
+                <i class="fa-solid fa-magnifying-glass"></i> ตรวจสอบสิทธิ์คีย์ในคลาวด์
+            </button>
+        </div>
+
+        <div id="result-container" style="display: none;">
+            <div class="info-display-panel" id="infoPanel" style="display: block;">
+                <div class="info-row">
+                    <span class="info-lbl">รหัสคีย์:</span>
+                    <span class="info-val highlight" id="display-key-id">-</span>
                 </div>
-                <div>
-                    <h1 class="text-md font-bold tracking-tight text-white">EasyLoan Pro</h1>
-                    <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full font-medium">v2.0 Enterprise</span>
+                <div class="info-row">
+                    <span class="info-lbl">เวลาคงเหลือระบบ:</span>
+                    <span class="info-val" id="display-expiry-status">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-lbl">บอร์ดเครื่องที่ล็อกอยู่:</span>
+                    <span class="info-val device-text" id="display-device-id">-</span>
                 </div>
             </div>
             
-            <nav class="p-4 space-y-1.5">
-                <button onclick="switchTab('dashboard')" id="menu-dashboard" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition duration-150 bg-indigo-600 text-white">
-                    <i class="fa-solid fa-chart-pie w-5 text-center text-base"></i> <span>แผงควบคุมหลัก</span>
-                </button>
-                <button onclick="switchTab('loans')" id="menu-loans" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition duration-150 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-hand-holding-dollar w-5 text-center text-base"></i> <span>รายการคำขอกู้เงิน</span>
-                </button>
-                <button onclick="switchTab('users')" id="menu-users" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition duration-150 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-users w-5 text-center text-base"></i> <span>รายชื่อลูกค้าทั้งหมด</span>
-                </button>
-            </nav>
+            <button class="btn btn-red" onclick="processDeviceReset()">
+                <i class="fa-solid fa-rotate"></i> ยืนยันปลดล็อกย้ายเครื่องใหม่
+            </button>
         </div>
-        
-        <div class="p-4 border-t border-slate-800 bg-slate-950/40">
-            <div class="flex items-center space-x-3 text-xs">
-                <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-indigo-400 border border-slate-600">AD</div>
-                <div>
-                    <p class="font-semibold text-slate-300">Administrator</p>
-                    <p class="text-[10px] text-slate-500">online-status</p>
-                </div>
-            </div>
-        </div>
-    </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        
-        <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 px-6 py-4 sticky top-0 z-40 flex justify-between items-center">
-            <h2 id="pageTitle" class="text-lg font-bold text-white">แผงควบคุมและวิเคราะห์ระบบ (Dashboard)</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-xs text-slate-400" id="liveClock"></span>
-                <div class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-lg text-xs flex items-center font-medium">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span> Real-time Sync
-                </div>
-            </div>
-        </header>
-
-        <main class="p-6 max-w-7xl w-full mx-auto space-y-8">
-
-            <section id="sec-dashboard" class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase block">คำขอรอตรวจสอบ</span>
-                        <h3 id="dashPendingCount" class="text-3xl font-extrabold text-amber-400 mt-2">0</h3>
-                        <p class="text-xs text-slate-500 mt-1">รายการที่ต้องเร่งดำเนินการพิจารณา</p>
-                        <i class="fa-solid fa-clock absolute right-4 bottom-4 text-slate-800 text-4xl -z-10"></i>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase block">อนุมัติแล้วเสร็จ</span>
-                        <h3 id="dashApprovedCount" class="text-3xl font-extrabold text-emerald-400 mt-2">0</h3>
-                        <p class="text-xs text-slate-500 mt-1">สัญญาเงินกู้ที่ปล่อยผ่านเข้าระบบแล้ว</p>
-                        <i class="fa-solid fa-circle-check absolute right-4 bottom-4 text-slate-800 text-4xl -z-10"></i>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase block">มูลค่าเงินกู้ปล่อยรวม</span>
-                        <h3 id="dashTotalValue" class="text-3xl font-extrabold text-indigo-400 mt-2">฿0</h3>
-                        <p class="text-xs text-slate-500 mt-1">วงเงินทุนเวียนสุทธิที่ปล่อยกู้</p>
-                        <i class="fa-solid fa-wallet absolute right-4 bottom-4 text-slate-800 text-4xl -z-10"></i>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase block">จำนวนสมาชิกทั้งหมด</span>
-                        <h3 id="dashUsersCount" class="text-3xl font-extrabold text-teal-400 mt-2">0</h3>
-                        <p class="text-xs text-slate-500 mt-1">ลูกค้าที่ลงทะเบียนในระบบ</p>
-                        <i class="fa-solid fa-users absolute right-4 bottom-4 text-slate-800 text-4xl -z-10"></i>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl lg:col-span-2">
-                        <h3 class="text-sm font-bold text-white mb-4"><i class="fa-solid fa-chart-line text-indigo-500 mr-2"></i> สัดส่วนวิเคราะห์และโครงสร้างธุรกรรมทางการเงิน</h3>
-                        <div class="h-64 flex items-center justify-center">
-                            <canvas id="loanAnalyticsChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-bolt text-yellow-400 mr-2"></i> ทางลัดแอดมินและการจัดการ</h3>
-                            <p class="text-xs text-slate-400">ระบบคัดกรองข้อมูลอัจฉริยะ ทำงานประสานงานกับฐานข้อมูลกลางแบบอัตโนมัติ</p>
-                        </div>
-                        <div class="space-y-2 mt-4">
-                            <button onclick="switchTab('loans'); setFilterStatus('pending');" class="w-full text-left bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 px-4 py-3 rounded-xl flex justify-between items-center text-amber-400 text-xs transition">
-                                <span><i class="fa-solid fa-folder-open mr-2"></i> เปิดดูเฉพาะรายการที่รออนุมัติ</span>
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                            <button onclick="exportLoansToCSV()" class="w-full text-left bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 px-4 py-3 rounded-xl flex justify-between items-center text-indigo-400 text-xs transition">
-                                <span><i class="fa-solid fa-file-excel mr-2"></i> ส่งออกตารางข้อมูลกู้เงิน (Excel/CSV)</span>
-                                <i class="fa-solid fa-download"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="sec-loans" class="space-y-4 hidden">
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-lg">
-                    <div class="relative w-full md:w-80">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
-                        <input type="text" id="searchBar" oninput="applyFilters()" placeholder="ค้นหาชื่อผู้กู้ หรือ เลขบัญชี..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-xs outline-none focus:border-indigo-500 text-slate-200 transition">
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-                        <select id="filterStatus" onchange="applyFilters()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500 text-slate-300">
-                            <option value="all">แสดงทุกสถานะ</option>
-                            <option value="pending">เฉพาะ: รออนุมัติ</option>
-                            <option value="approved">เฉพาะ: อนุมัติแล้ว</option>
-                            <option value="rejected">เฉพาะ: ปฏิเสธแล้ว</option>
-                        </select>
-                        <button onclick="exportLoansToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-xl text-xs flex items-center transition shadow-md shadow-indigo-600/10">
-                            <i class="fa-solid fa-file-csv mr-1.5 text-sm"></i> Export CSV
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-950 border-b border-slate-800 text-slate-400 text-[11px] tracking-wider uppercase font-semibold">
-                                    <th class="py-4 px-6">วันที่ยื่นเรื่อง</th>
-                                    <th class="py-4 px-6">ข้อมูลผู้ส่งคำขอ</th>
-                                    <th class="py-4 px-6">ยอดวงเงินกู้</th>
-                                    <th class="py-4 px-6">ช่องทางธนาคารรับเงิน</th>
-                                    <th class="py-4 px-6">กำหนดชำระคืน</th>
-                                    <th class="py-4 px-6 text-center">สถานะ</th>
-                                    <th class="py-4 px-6 text-center">การจัดการคัดกรอง</th>
-                                </tr>
-                            </thead>
-                            <tbody id="loanMasterTableBody" class="text-xs divide-y divide-slate-800/60">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section id="sec-users" class="space-y-4 hidden">
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-users-gear text-teal-400 mr-2"></i> ระบบจัดการประวัติและแบล็กลิสต์ลูกค้า (Customer Directory & Fraud Control)</h3>
-                    <p class="text-xs text-slate-400 mb-4">แอดมินสามารถเปิด-ปิด สิทธิ์ในการยื่นคำขอกู้ยืมของลูกค้าแต่ละคนได้ทันทีเพื่อป้องกันมิจฉาชีพ</p>
-                    
-                    <div class="overflow-x-auto border border-slate-800 rounded-xl bg-slate-950">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-900/50 border-b border-slate-800 text-slate-400 text-[11px] uppercase font-semibold">
-                                    <th class="py-3 px-4">UID ลูกค้า</th>
-                                    <th class="py-3 px-4">ชื่อ-นามสกุล</th>
-                                    <th class="py-3 px-4">เบอร์โทรศัพท์</th>
-                                    <th class="py-3 px-4">อีเมลผู้ใช้งาน</th>
-                                    <th class="py-3 px-4 text-center">สถานะสิทธิ์</th>
-                                    <th class="py-3 px-4 text-center">ปรับเปลี่ยนสถานะ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userDirectoryTableBody" class="text-xs divide-y divide-slate-800/40">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+        <a href="index.html" class="btn btn-grey">
+            <i class="fa-solid fa-house"></i> เสร็จสิ้นและกลับหน้าแรก
+        </a>
     </div>
 
-    <div id="detailModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-            <div class="px-6 py-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
-                <h4 class="font-bold text-white text-sm flex items-center"><i class="fa-solid fa-file-signature text-indigo-400 mr-2"></i> พิจารณาเอกสารคำขอรับเงินกู้</h4>
-                <button onclick="closeLoanModal()" class="text-slate-400 hover:text-slate-200"><i class="fa-solid fa-xmark text-base"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p><span class="text-slate-400">ชื่อผู้กู้:</span> <span id="mdlName" class="font-bold text-slate-200"></span></p>
-                    <p><span class="text-slate-400">เบอร์โทรศัพท์:</span> <span id="mdlPhone" class="font-semibold text-slate-200"></span></p>
-                    <p><span class="text-slate-400">จำนวนเงินกู้:</span> <span id="mdlAmount" class="font-extrabold text-yellow-400 text-sm"></span></p>
-                    <p><span class="text-slate-400">กำหนดคืนภายใน:</span> <span id="mdlDate" class="font-semibold text-slate-200"></span></p>
-                    <p class="col-span-2"><span class="text-slate-400">บัญชีรับเงิน:</span> <span id="mdlBankInfo" class="font-medium text-slate-300"></span></p>
-                </div>
-                
-                <div>
-                    <label class="block text-slate-400 font-medium mb-1.5">บันทึกช่วยจำจากแอดมิน / หมายเหตุคำชี้แจง (Admin Notes)</label>
-                    <textarea id="mdlAdminNotes" placeholder="เช่น 'อนุมัติวงเงินแล้ว - รอโอนเงินสายที่ 1' หรือเหตุผลที่ปฏิเสธเพื่อแจ้งลูกค้า..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 outline-none focus:border-indigo-500 transition"></textarea>
-                </div>
-                
-                <div id="mdlActionButtons" class="flex space-x-3 pt-2">
-                    <button id="btnMdlReject" class="w-1/2 bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-xl transition shadow-lg shadow-red-900/20">ปฏิเสธไม่อนุมัติ</button>
-                    <button id="btnMdlApprove" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl transition shadow-lg shadow-emerald-900/20">อนุมัติวงเงินกู้</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // Firebase Setup Config Object
+    <script>
+        // --- ดึงคอนฟิกสากลเชื่อมตรงจากหลังบ้านตัวจริงของคุณ ---
         const firebaseConfig = {
             apiKey: "AIzaSyDdVwtGix3Vspr0VVqW5-M5PL6IQZ-9guk",
             authDomain: "kuku-bd6bd.firebaseapp.com",
@@ -233,294 +210,98 @@
             appId: "1:20260309266:web:95cff78d1d9bc402344bcb",
             measurementId: "G-1YNH71SD69"
         };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        let currentActiveKey = "";
 
-        // State Engines
-        let masterLoansArray = [];
-        let masterUsersArray = [];
-        let activeSelectedLoanId = null;
-        let chartInstance = null;
-
-        // Dynamic Real-time Clock Counter
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('liveClock').innerText = "เวลาปัจจุบัน: " + now.toLocaleTimeString('th-TH') + " | " + now.toLocaleDateString('th-TH');
-        }, 1000);
-
-        // STREAM 1: Loans Database Collector
-        onSnapshot(collection(db, "loans"), (snapshot) => {
-            masterLoansArray = [];
-            snapshot.forEach((d) => {
-                masterLoansArray.push({ id: d.id, ...d.data() });
-            });
+        // --- ระบบเช็คประวัติคีย์ก่อนรีเซ็ต ---
+        function checkCustomerKeyData() {
+            const inputKey = document.getElementById('customerKeyInput').value.trim();
             
-            recalculateMetrics();
-            applyFilters();
-            renderChartGraph();
-        });
-
-        // STREAM 2: Users Database Collector
-        onSnapshot(collection(db, "users"), (snapshot) => {
-            masterUsersArray = [];
-            snapshot.forEach((d) => {
-                masterUsersArray.push({ id: d.id, ...d.data() });
-            });
-            
-            document.getElementById('dashUsersCount').innerText = masterUsersArray.length;
-            renderUserDirectoryTable();
-        });
-
-        // CORE ENGINE: Calculate Analytics Dashboard
-        function recalculateMetrics() {
-            let pending = 0, approved = 0, totalValue = 0;
-            
-            masterLoansArray.forEach(l => {
-                if (l.status === 'pending') pending++;
-                if (l.status === 'approved') {
-                    approved++;
-                    totalValue += parseFloat(l.amount || 0);
-                }
-            });
-
-            document.getElementById('dashPendingCount').innerText = pending;
-            document.getElementById('dashApprovedCount').innerText = approved;
-            document.getElementById('dashTotalValue').innerText = "฿" + totalValue.toLocaleString('th-TH', {minimumFractionDigits: 2});
-        }
-
-        // CORE ENGINE: Process Advanced UI Render & Filters
-        window.applyFilters = function() {
-            const searchVal = document.getElementById('searchBar').value.toLowerCase();
-            const statusFilter = document.getElementById('filterStatus').value;
-            const tableBody = document.getElementById('loanMasterTableBody');
-            
-            let filtered = masterLoansArray.filter(l => {
-                const matchesSearch = (l.borrowerName || '').toLowerCase().includes(searchVal) || (l.accountNumber || '').includes(searchVal);
-                const matchesStatus = statusFilter === 'all' || l.status === statusFilter;
-                return matchesSearch && matchesStatus;
-            });
-
-            if (filtered.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500">ไม่พบข้อมูลตามตัวเลือกคัดกรองหรือคำค้นหานี้</td></tr>`;
+            if(!inputKey) {
+                Swal.fire({ icon: 'warning', title: 'ระบุข้อมูล', text: 'กรุณากรอกหรือวางรหัสคีย์พรีเมียมของคุณก่อนครับ', confirmButtonColor: '#ff003c' });
                 return;
             }
 
-            let rowsHtml = "";
-            filtered.forEach(l => {
-                const dateFmt = new Date(l.createdAt).toLocaleDateString('th-TH', {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'});
-                const retDateFmt = new Date(l.returnDate).toLocaleDateString('th-TH');
-                
-                let badgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/20";
-                let statusText = "รออนุมัติ";
-                if(l.status === 'approved') { badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"; statusText = "อนุมัติแล้ว"; }
-                if(l.status === 'rejected') { badgeClass = "bg-red-500/10 text-red-400 border-red-500/20"; statusText = "ปฏิเสธ"; }
+            Swal.fire({ title: 'กำลังสแกนฐานข้อมูลคลาวด์...', didOpen: () => { Swal.showLoading(); } });
 
-                const blueprintString = `ชื่อ: ${l.borrowerName} | ยอดเงินกู้: ฿${parseFloat(l.amount).toLocaleString()} | ธนาคาร: ${l.bank} | เลขบัญชี: ${l.accountNumber}`;
+            db.collection("keys").doc(inputKey).get().then(doc => {
+                Swal.close();
+                if (doc.exists) {
+                    const data = doc.data();
+                    currentActiveKey = doc.id;
 
-                rowsHtml += `
-                    <tr class="hover:bg-slate-900/40 transition duration-100">
-                        <td class="py-3.5 px-6 font-medium text-slate-400">${dateFmt}</td>
-                        <td class="py-3.5 px-6 font-bold text-slate-200">
-                            ${l.borrowerName}
-                            <span class="block font-normal text-[10px] text-slate-500 mt-0.5"><i class="fa-solid fa-phone text-[9px]"></i> ${l.phone}</span>
-                        </td>
-                        <td class="py-3.5 px-6 font-extrabold text-indigo-400 text-sm">฿${parseFloat(l.amount).toLocaleString()}</td>
-                        <td class="py-3.5 px-6">
-                            <span class="font-medium text-slate-300 block">${l.bank}</span>
-                            <span class="text-slate-500 tracking-wider font-mono">${l.accountNumber}</span>
-                        </td>
-                        <td class="py-3.5 px-6 text-slate-300">${retDateFmt}</td>
-                        <td class="py-3.5 px-6 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeClass}">${statusText}</span>
-                        </td>
-                        <td class="py-3.5 px-6 text-center">
-                            <div class="flex justify-center items-center gap-1.5">
-                                <button onclick="navigator.clipboard.writeText(\`${blueprintString}\`); alert('คัดลอกข้อมูลคำขอกู้เรียบร้อย!');" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition" title="คัดลอกข้อมูลแบบย่อ">
-                                    <i class="fa-solid fa-copy"></i>
-                                </button>
-                                <button onclick="openLoanModal('${l.id}')" class="px-2 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition flex items-center">
-                                    <i class="fa-solid fa-magnifying-glass-chart mr-1"></i> ตรวจสอบ
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            tableBody.innerHTML = rowsHtml;
-        }
-
-        // CORE ENGINE: Render Active Chart Analytics Graph
-        function renderChartGraph() {
-            const ctx = document.getElementById('loanAnalyticsChart').getContext('2d');
-            let pendingVal = 0, approvedVal = 0, rejectedVal = 0;
-            
-            masterLoansArray.forEach(l => {
-                if(l.status === 'pending') pendingVal += parseFloat(l.amount || 0);
-                if(l.status === 'approved') approvedVal += parseFloat(l.amount || 0);
-                if(l.status === 'rejected') rejectedVal += parseFloat(l.amount || 0);
-            });
-
-            if (chartInstance) { chartInstance.destroy(); }
-
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['รอดำเนินการ ตรวจสอบ (บาท)', 'อนุมัติผ่านจ่ายวงเงิน (บาท)', 'ปฏิเสธ/ไม่อนุมัติ (บาท)'],
-                    datasets: [{
-                        label: 'สรุปสถานะมูลค่าทางการเงินแบ่งตามประเภท',
-                        data: [pendingVal, approvedVal, rejectedVal],
-                        backgroundColor: ['rgba(251, 191, 36, 0.2)', 'rgba(52, 211, 153, 0.2)', 'rgba(248, 113, 113, 0.2)'],
-                        borderColor: ['#fbbf24', '#34d399', '#f87171'],
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'Prompt' } } },
-                        x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: 'Prompt' } } }
+                    document.getElementById('display-key-id').innerText = doc.id;
+                    
+                    if (data.status === 'used' && data.expiresAt > 0) {
+                        const diffTime = data.expiresAt - new Date().getTime();
+                        if (diffTime <= 0) {
+                            document.getElementById('display-expiry-status').innerHTML = '<span style="color:#ff3333; font-weight:bold;">หมดอายุการใช้งาน</span>';
+                        } else {
+                            const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            document.getElementById('display-expiry-status').innerHTML = `<span style="color:var(--success-green); font-weight:bold;">เหลือเวลา ${daysLeft} วัน</span>`;
+                        }
+                    } else {
+                        document.getElementById('display-expiry-status').innerText = `${data.days} วัน (คีย์ใหม่ยังไม่เริ่มนับเวลา)`;
                     }
+
+                    document.getElementById('display-device-id').innerHTML = data.deviceId ? `<i class="fa-solid fa-mobile-screen" style="color:var(--neon-blue);"></i> ${data.deviceId}` : '<span style="color:rgba(255,255,255,0.25);">บอร์ดว่าง (ยังไม่มีการผูกเครื่อง)</span>';
+
+                    document.getElementById('search-container').style.display = 'none';
+                    document.getElementById('result-container').style.display = 'block';
+
+                } else {
+                    Swal.fire({ icon: 'error', title: 'ไม่พบรหัสคีย์', text: 'ไม่พบข้อมูลคีย์พรีเมียมนี้ในระบบหลัก กรุณาตรวจสอบอีกครั้งครับ', confirmButtonColor: '#ff003c' });
+                }
+            }).catch(err => {
+                Swal.close();
+                Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ฐานข้อมูลในขณะนี้ได้', confirmButtonColor: '#ff003c' });
+            });
+        }
+
+        // --- แกนหลักแก้ไขบั๊ก: ลบฟิลด์แบบถอนรากถอนโคน + ปรับสถานะกลับเป็น unused ---
+        function processDeviceReset() {
+            if(!currentActiveKey) return;
+
+            Swal.fire({
+                title: 'ยืนยันการย้ายเครื่อง?',
+                text: "ระบบจะทำการล้างประวัติเครื่องเดิมออกจากฐานข้อมูลคลาวด์ เพื่อให้คุณนำไปเข้าใช้งานที่เครื่องใหม่ได้ทันที",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#ff003c',
+                cancelButtonColor: '#1a0b0d',
+                confirmButtonText: 'ยืนยันปลดล็อกเครื่อง',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'กำลังตัดการเชื่อมต่ออุปกรณ์...', didOpen: () => { Swal.showLoading(); } });
+
+                    // ใช้ FieldValue.delete() เพื่อลบฟิลด์ deviceId ทิ้งไปเลย และเปลี่ยนสถานะกลับเป็น unused เพื่อให้ Loader เครื่องใหม่ยอมรับ
+                    db.collection("keys").doc(currentActiveKey).update({
+                        deviceId: firebase.firestore.FieldValue.delete(),
+                        status: "unused"
+                    }).then(() => {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ปลดล็อกบอร์ดสำเร็จ!',
+                            text: 'รีเซ็ตข้อมูลอุปกรณ์เสร็จสิ้น สามารถเปิดแอปที่เครื่องใหม่เพื่อล็อกอินเข้าใช้งานได้ทันทีครับ!',
+                            confirmButtonColor: '#ff003c'
+                        }).then(() => {
+                            // รีเซ็ตหน้าจอกลับสู่โหมดค้นหาเริ่มต้นอย่างนุ่มนวล
+                            document.getElementById('customerKeyInput').value = "";
+                            document.getElementById('search-container').style.display = 'block';
+                            document.getElementById('result-container').style.display = 'none';
+                            currentActiveKey = "";
+                        });
+                    }).catch(error => {
+                        Swal.close();
+                        Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'ไม่สามารถส่งคำสั่งเคลียร์ข้อมูลไปยังระบบ Cloud ได้', confirmButtonColor: '#ff003c' });
+                    });
                 }
             });
-        }
-
-        // CORE ENGINE: Render User Directory Table & Blacklist Controls
-        function renderUserDirectoryTable() {
-            const tbody = document.getElementById('userDirectoryTableBody');
-            let html = "";
-            
-            if(masterUsersArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500">ยังไม่มีรายชื่อผู้ลงทะเบียนเข้าใช้งานในฐานข้อมูล</td></tr>`;
-                return;
-            }
-
-            masterUsersArray.forEach(u => {
-                const isBanned = u.isBlacklisted === true;
-                const statusBadge = isBanned 
-                    ? `<span class="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full font-bold">ระงับสิทธิ์ (Blacklist)</span>`
-                    : `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">ใช้งานปกติ</span>`;
-
-                const btnToggle = isBanned
-                    ? `<button onclick="toggleUserBlacklist('${u.id}', false)" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition font-medium text-[11px]"><i class="fa-solid fa-user-check"></i> ปลดแบน</button>`
-                    : `<button onclick="toggleUserBlacklist('${u.id}', true)" class="px-2 py-1 bg-red-600 hover:bg-red-500 text-white rounded-lg transition font-medium text-[11px]"><i class="fa-solid fa-user-slash"></i> บล็อกประวัติ</button>`;
-
-                html += `
-                    <tr class="hover:bg-slate-900/20 transition">
-                        <td class="py-3 px-4 font-mono text-slate-500 text-[10px]">${u.id}</td>
-                        <td class="py-3 px-4 font-bold text-slate-300">${u.firstName || '-'} ${u.lastName || '-'}</td>
-                        <td class="py-3 px-4 text-slate-300 font-medium">${u.phone || '-'}</td>
-                        <td class="py-3 px-4 text-slate-400">${u.email}</td>
-                        <td class="py-3 px-4 text-center">${statusBadge}</td>
-                        <td class="py-3 px-4 text-center">${btnToggle}</td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        // CONTROL ACTION: Toggle Blacklist
-        window.toggleUserBlacklist = async function(userId, blockState) {
-            const msg = blockState ? "คุณแน่ใจที่จะใส่รายชื่อลูกค้ารายนี้เข้าสู่บัญชีดำ (Blacklist) ใช่หรือไม่?" : "ปลดล็อกสิทธิ์ใช้งานปกติของลูกค้าท่านนี้?";
-            if(!confirm(msg)) return;
-            try {
-                await updateDoc(doc(db, "users", userId), { isBlacklisted: blockState });
-                alert("ดำเนินการอัปเดตสิทธิ์บัญชีผู้ใช้สำเร็จ!");
-            } catch (e) { alert(e.message); }
-        }
-
-        // CONTROL ACTION: Open Detailed Modal View 
-        window.openLoanModal = function(loanId) {
-            activeSelectedLoanId = loanId;
-            const target = masterLoansArray.find(x => x.id === loanId);
-            if(!target) return;
-
-            document.getElementById('mdlName').innerText = target.borrowerName;
-            document.getElementById('mdlPhone').innerText = target.phone;
-            document.getElementById('mdlAmount').innerText = "฿" + parseFloat(target.amount).toLocaleString() + " บาท";
-            document.getElementById('mdlDate').innerText = new Date(target.returnDate).toLocaleDateString('th-TH');
-            document.getElementById('mdlBankInfo').innerText = `${target.bank} (เลขที่: ${target.accountNumber})`;
-            document.getElementById('mdlAdminNotes').value = target.adminNotes || "";
-
-            // Hide/Show processing controls if already verified
-            if (target.status !== 'pending') {
-                document.getElementById('mdlActionButtons').classList.add('hidden');
-            } else {
-                document.getElementById('mdlActionButtons').classList.remove('hidden');
-            }
-
-            document.getElementById('detailModal').classList.remove('hidden');
-        }
-
-        window.closeLoanModal = function() { document.getElementById('detailModal').classList.add('hidden'); }
-
-        // EXECUTORS: Status Resolution Buttons Handler Inside Modal
-        document.getElementById('btnMdlApprove').addEventListener('click', () => { processLoanStatusUpdate('approved'); });
-        document.getElementById('btnMdlReject').addEventListener('click', () => { processLoanStatusUpdate('rejected'); });
-
-        async function processLoanStatusUpdate(statusOutcome) {
-            const notes = document.getElementById('mdlAdminNotes').value;
-            try {
-                await updateDoc(doc(db, "loans", activeSelectedLoanId), {
-                    status: statusOutcome,
-                    adminNotes: notes
-                });
-                alert("ประมวลผลเสร็จสิ้นและจัดเก็บประวัติเอกสารเรียบร้อย!");
-                closeLoanModal();
-            } catch (error) { alert("Error: " + error.message); }
-        }
-
-        // NAVIGATION SWITCHER CONTROL
-        window.switchTab = function(tabName) {
-            document.getElementById('sec-dashboard').classList.add('hidden');
-            document.getElementById('sec-loans').classList.add('hidden');
-            document.getElementById('sec-users').classList.add('hidden');
-
-            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
-
-            // Reset menu classes styles
-            ['dashboard', 'loans', 'users'].forEach(t => {
-                const el = document.getElementById(`menu-${t}`);
-                el.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition duration-150 text-slate-400 hover:bg-slate-800 hover:text-slate-200";
-            });
-
-            document.getElementById(`menu-${tabName}`).className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition duration-150 bg-indigo-600 text-white";
-            
-            // Dynamic headers text
-            const titleMap = { 'dashboard': 'แผงควบคุมและวิเคราะห์ระบบ (Dashboard)', 'loans': 'ศูนย์จัดการตรวจสอบเอกสารเงินกู้ (Loan Request Console)', 'users': 'ฐานข้อมูลสมาชิกมาตรการควบคุมความเสี่ยง (User & Fraud Management)' };
-            document.getElementById('pageTitle').innerText = titleMap[tabName];
-        }
-
-        window.setFilterStatus = function(val) {
-            document.getElementById('filterStatus').value = val;
-            applyFilters();
-        }
-
-        // TOOL UTILITY: Export to Microsoft Excel / Text CSV Engine
-        window.exportLoansToCSV = function() {
-            if (masterLoansArray.length === 0) { alert("ไม่มีข้อมูลสำหรับการดาวน์โหลด"); return; }
-            
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Prepend BOM for Thai Characters inside Excel
-            csvContent += "วันที่ยื่นเรื่อง,ชื่อผู้กู้,เบอร์โทร,ยอดเงินกู้,ธนาคาร,เลขบัญชี,กำหนดคืน,สถานะ,บันทึกแอดมิน\n";
-            
-            masterLoansArray.forEach(l => {
-                const date = new Date(l.createdAt).toLocaleDateString('th-TH');
-                const returnDate = new Date(l.returnDate).toLocaleDateString('th-TH');
-                const notes = (l.adminNotes || '').replace(/,/g, ' '); // prevent breaking columns format
-                
-                csvContent += `"${date}","${l.borrowerName}","${l.phone}","${l.amount}","${l.bank}","${l.accountNumber}","${returnDate}","${l.status}","${notes}"\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `รายงานข้อมูลเงินกู้_EasyLoan_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
